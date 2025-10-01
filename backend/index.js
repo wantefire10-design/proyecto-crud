@@ -41,6 +41,18 @@ app.get('/api/productos', (req, res) => {
   });
 });
 
+// Esta ruta NUNCA debe devolver la contraseña, ni siquiera hasheada.
+app.get('/api/usuarios', async (req, res) => {
+  try {
+    const sql = 'SELECT id_usuario, nombre_usuario, email, nombre_completo, fecha_registro FROM usuarios';
+    const [results] = await pool.query(sql);
+    res.json(results);
+  } catch (error) {
+    console.error('Error al obtener usuarios:', error);
+    res.status(500).json({ error: 'Error en el servidor.' });
+  }
+});
+
 // --- Iniciar el servidor ---
 app.listen(port, () => {
   console.log(`Servidor corriendo en http://localhost:${port}`);
